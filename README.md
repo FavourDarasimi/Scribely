@@ -12,7 +12,9 @@ which meetings that browser can see. This is an identification key,
 not a real security/auth boundary.
 
 ## Backend setup
-
-## Frontend setup
+1. Activate virtual environment and install requirements
+2. Apply migrations: `python manage.py migrate`
+3. Run the development server: `python manage.py runserver`
+4. Start the Celery worker (required for transcription): `celery -A config worker -l info`
 # Scribely
 # Scribely
