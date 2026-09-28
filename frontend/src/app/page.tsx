@@ -253,6 +253,84 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
+        {/* Upload Page Mockup */}
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="w-full max-w-6xl mx-auto px-6 mt-12 md:mt-24 z-20 relative"
+        >
+          {/* Browser Window Wrapper */}
+          <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden border border-[#333333] shadow-2xl bg-[#1A1A1A]">
+            {/* Browser Header */}
+            <div className="h-10 md:h-12 bg-[#242424] border-b border-[#333333] flex items-center px-4 md:px-6 gap-2">
+              <div className="flex gap-2">
+                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FF5F56]" />
+                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#FFBD2E]" />
+                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#27C93F]" />
+              </div>
+              <div className="mx-auto bg-[#1A1A1A] text-neutral-500 text-[10px] md:text-xs px-16 md:px-24 py-1.5 rounded-lg font-mono border border-[#333333]">
+                scribely.ai/upload
+              </div>
+            </div>
+
+            {/* Mockup Content (Replica of Upload Page) */}
+            <div className="w-full p-6 md:p-12 flex flex-col items-center justify-start bg-[#1A1A1A] min-h-[400px] md:min-h-[550px] relative pointer-events-none select-none">
+              
+              {/* Fake Recording UI */}
+              <div className="flex flex-col items-center mt-4 md:mt-8">
+                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-[#FF6B4A] shadow-[0_0_50px_rgba(255,107,74,0.3)] flex items-center justify-center text-white relative">
+                  <div className="absolute inset-0 rounded-full border-2 border-[#FF6B4A] animate-ping opacity-30" />
+                  <Mic01Icon className="w-10 h-10 md:w-12 md:h-12" />
+                </div>
+                <h2 className="mt-8 text-2xl md:text-3xl font-bold text-white tracking-tight">02m 45s</h2>
+                <div className="flex items-center gap-2 mt-3">
+                  <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                  <p className="text-sm md:text-base text-neutral-400">Recording in progress...</p>
+                </div>
+              </div>
+
+              {/* Fake Recent Logs */}
+              <div className="w-full max-w-[600px] mt-16 md:mt-20">
+                <div className="flex items-center gap-3 mb-6 px-2">
+                  <div className="w-1.5 h-5 rounded-full bg-gradient-to-b from-[#FF6B4A] to-[#ff3300] shadow-[0_0_12px_rgba(255,107,74,0.6)]" />
+                  <h3 className="text-xs md:text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-400 uppercase tracking-widest">
+                    Recent Logs
+                  </h3>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {[
+                    { title: "Product Sync - Q4 Roadmap", status: "COMPLETED", color: "green" },
+                    { title: "Client Kickoff Call", status: "COMPLETED", color: "green" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center justify-between p-4 bg-[#171717] border border-[#2A2A2A] rounded-xl shadow-sm">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-[#111] border border-[#2A2A2A] flex items-center justify-center shadow-inner">
+                          <Mic01Icon size={16} className="text-neutral-500" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm md:text-base font-semibold text-neutral-200">
+                            {item.title}
+                          </h4>
+                          <p className="text-[10px] md:text-[11px] text-neutral-500 font-mono mt-1 uppercase tracking-wider">
+                            Oct {i+1}, 2026
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-mono font-bold px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400 border border-green-500/20">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,1)]" />
+                        {item.status}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
+
         {/* How it works */}
         <div ref={containerRef} className="relative w-full py-16">
           <div className="w-full max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
