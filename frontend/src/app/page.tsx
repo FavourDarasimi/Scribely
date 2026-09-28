@@ -85,9 +85,9 @@ export default function Home() {
   const howItWorksSteps = [
     {
       number: "01",
-      title: "Upload your audio",
-      description: "Drop your meeting recording directly into the browser. We accept most standard audio formats.",
-      icon: Upload01Icon
+      title: "Record your meeting",
+      description: "Hit record directly in your browser. Scribely securely captures your conversation in real-time.",
+      icon: Mic01Icon
     },
     {
       number: "02",
@@ -133,7 +133,7 @@ export default function Home() {
               href="/upload"
               className="text-sm font-medium px-4 py-2 bg-[#FF6B4A] text-white rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#FF6B4A]/20"
             >
-              Upload recording
+              New Recording
             </Link>
           </motion.div>
         </div>
@@ -162,9 +162,9 @@ export default function Home() {
                 href="/upload"
                 className="w-full inline-flex justify-center items-center gap-2 px-4 sm:px-8 py-3 sm:py-4 bg-[#FF6B4A] text-white text-sm sm:text-base font-semibold rounded-full shadow-lg shadow-[#FF6B4A]/30 hover:opacity-90 transition-opacity focus:outline-none focus:ring-4 focus:ring-[#FF6B4A]/40 whitespace-nowrap"
               >
-                <Upload01Icon size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Upload a recording</span>
-                <span className="sm:hidden">Upload</span>
+                <Mic01Icon size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Start a recording</span>
+                <span className="sm:hidden">Record</span>
               </Link>
             </motion.div>
 
@@ -435,8 +435,8 @@ export default function Home() {
                     href="/upload"
                     className="inline-flex items-center gap-2 px-8 py-4 bg-[#FF6B4A] text-white font-semibold rounded-full shadow-lg shadow-[#FF6B4A]/30 hover:opacity-90 transition-opacity focus:outline-none focus:ring-4 focus:ring-[#FF6B4A]/40"
                   >
-                    <Upload01Icon size={20} />
-                    Start transcribing
+                    <Mic01Icon size={20} />
+                    Start recording now
                   </Link>
                 </motion.div>
               </div>
