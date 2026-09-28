@@ -170,7 +170,7 @@ export default function Home() {
 
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="flex-1 sm:flex-initial">
               <a
-                href="https://github.com"
+                href="https://github.com/FavourDarasimi/Scribely"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full inline-flex justify-center items-center gap-2 px-4 sm:px-8 py-3 sm:py-4 bg-[#242424] border border-[#333333] text-white text-sm sm:text-base font-semibold rounded-full hover:bg-[#333333] transition-colors focus:outline-none focus:ring-4 focus:ring-[#333333] whitespace-nowrap"
@@ -455,7 +455,7 @@ export default function Home() {
           <div className="flex items-center gap-6 text-sm text-neutral-400">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+            <a href="https://github.com/FavourDarasimi/Scribely" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
               GitHub
             </a>
           </div>
