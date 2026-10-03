@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Mic01Icon, ArrowLeft01Icon, Refresh01Icon, Alert01Icon, CheckmarkBadge01Icon, Delete01Icon } from "hugeicons-react";
+import { Mic01Icon, ArrowLeft01Icon, Refresh01Icon, Alert01Icon, CheckmarkBadge01Icon, Delete01Icon, Copy01Icon, Tick01Icon } from "hugeicons-react";
 import { motion } from "framer-motion";
 import Modal, { ModalConfig } from "@/components/Modal";
 
@@ -33,6 +33,14 @@ export default function MeetingPage() {
   const [meeting, setMeeting] = useState<Meeting | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRetrying, setIsRetrying] = useState(false);
+  const [activeTab, setActiveTab] = useState<"transcript" | "summary">("transcript");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const getUserId = () => {
     if (typeof window !== "undefined") {
@@ -293,12 +301,40 @@ export default function MeetingPage() {
         )}
 
         {meeting.status === "completed" && meeting.transcript && (
-          <div className="space-y-12">
-            {/* Summary Placeholder (If implemented on backend) */}
-            {meeting.summary && (
-              <section className="bg-gradient-to-br from-[#FF6B4A]/10 to-transparent border border-[#FF6B4A]/20 p-8 rounded-3xl">
+          <div className="mt-8 flex flex-col">
+            {/* Tabs Header */}
+            <div className="flex items-center gap-6 border-b border-[#333333] mb-8">
+              <button
+                onClick={() => setActiveTab("transcript")}
+                className={`pb-4 text-lg font-bold transition-colors border-b-2 ${
+                  activeTab === "transcript" ? "border-[#FF6B4A] text-white" : "border-transparent text-neutral-500 hover:text-neutral-300"
+                }`}
+              >
+                Transcript
+              </button>
+              {meeting.summary && (
+                <button
+                  onClick={() => setActiveTab("summary")}
+                  className={`pb-4 text-lg font-bold transition-colors border-b-2 ${
+                    activeTab === "summary" ? "border-[#FF6B4A] text-white" : "border-transparent text-neutral-500 hover:text-neutral-300"
+                  }`}
+                >
+                  Summary
+                </button>
+              )}
+            </div>
+
+            {/* Tab Contents */}
+            {activeTab === "summary" && meeting.summary && (
+              <section className="bg-gradient-to-br from-[#FF6B4A]/10 to-transparent border border-[#FF6B4A]/20 p-8 rounded-3xl relative group">
+                <button 
+                  onClick={() => handleCopy(meeting.summary!.summary_text + "\n\n" + (meeting.summary!.action_items || []).join("\n"))}
+                  className="absolute top-6 right-6 p-2 rounded-lg bg-[#111111]/50 border border-[#333333] hover:bg-[#222222] text-neutral-400 hover:text-white transition-colors opacity-0 group-hover:opacity-100"
+                >
+                  {copied ? <Tick01Icon size={18} className="text-green-500" /> : <Copy01Icon size={18} />}
+                </button>
                 <h2 className="text-2xl font-bold text-white mb-4">Summary</h2>
-                <p className="text-base md:text-lg text-neutral-300 leading-relaxed mb-6">
+                <p className="text-base md:text-lg text-neutral-300 leading-relaxed mb-6 pr-8">
                   {meeting.summary.summary_text}
                 </p>
                 {meeting.summary.action_items?.length > 0 && (
@@ -317,40 +353,50 @@ export default function MeetingPage() {
               </section>
             )}
 
-            <section>
-              <h2 className="text-2xl font-bold text-white mb-8 border-b border-[#333333] pb-4">Full Transcript</h2>
-              <div className="space-y-8">
-                {groupedSpeakers.map((segment, idx) => {
-                  const colorClass = getSpeakerColor(segment.speaker);
-                  return (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      key={idx} 
-                      className="flex gap-4 group"
-                    >
-                      <div className="flex-shrink-0 mt-1">
-                        <div className={`w-10 h-10 rounded-full ${colorClass}/20 flex items-center justify-center text-white text-sm font-bold border border-${colorClass.split('-')[1]}-500/30`}>
-                          {segment.speaker.substring(0, 2).toUpperCase()}
+            {activeTab === "transcript" && (
+              <section className="relative group">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold text-white">Full Transcript</h2>
+                  <button 
+                    onClick={() => handleCopy(meeting.transcript!.full_text)}
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#242424] border border-[#333333] hover:bg-[#333333] text-neutral-400 hover:text-white transition-colors text-sm font-semibold"
+                  >
+                    {copied ? <><Tick01Icon size={16} className="text-green-500" /> Copied</> : <><Copy01Icon size={16} /> Copy Text</>}
+                  </button>
+                </div>
+                <div className="space-y-8">
+                  {groupedSpeakers.map((segment, idx) => {
+                    const colorClass = getSpeakerColor(segment.speaker);
+                    return (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        key={idx} 
+                        className="flex gap-4 group"
+                      >
+                        <div className="flex-shrink-0 mt-1">
+                          <div className={`w-10 h-10 rounded-full ${colorClass}/20 flex items-center justify-center text-white text-sm font-bold border border-${colorClass.split('-')[1]}-500/30`}>
+                            {segment.speaker.substring(0, 2).toUpperCase()}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-baseline gap-3 mb-1">
-                          <span className="font-semibold text-neutral-200">{segment.speaker}</span>
-                          <span className="text-xs text-neutral-500 font-mono">
-                            {formatTimestamp(segment.start)} - {formatTimestamp(segment.end)}
-                          </span>
+                        <div className="flex-1">
+                          <div className="flex items-baseline gap-3 mb-1">
+                            <span className="font-semibold text-neutral-200">{segment.speaker}</span>
+                            <span className="text-xs text-neutral-500 font-mono">
+                              {formatTimestamp(segment.start)} - {formatTimestamp(segment.end)}
+                            </span>
+                          </div>
+                          <p className="text-base md:text-lg text-neutral-400 leading-relaxed">
+                            {segment.text.join(" ")}
+                          </p>
                         </div>
-                        <p className="text-base md:text-lg text-neutral-400 leading-relaxed">
-                          {segment.text.join(" ")}
-                        </p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </section>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </div>
         )}
       </main>

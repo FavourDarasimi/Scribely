@@ -41,11 +41,15 @@ def submit_audio_to_gladia(file_path):
     if not audio_url:
         raise ValueError("No audio_url returned from Gladia upload")
         
-    # Step 2: Request transcription with diarization
+    # Step 2: Request transcription with diarization and summarization
     transcription_url = f"{GLADIA_API_URL}/transcription"
     payload = {
         "audio_url": audio_url,
-        "diarization": True
+        "diarization": True,
+        "summarization": True,
+        "summarization_config": {
+            "type": "bullet_points"
+        }
     }
     # x-gladia-key is already in headers
     headers["Content-Type"] = "application/json"
@@ -92,7 +96,7 @@ def poll_gladia_result(job_id, timeout=3600, poll_interval=10):
 
 def parse_gladia_transcript(gladia_response):
     """
-    Parses full text and diarized speaker segments into a uniform shape.
+    Parses full text, diarized speaker segments, and summary into a uniform shape.
     """
     result = gladia_response.get("result", {})
     transcription = result.get("transcription", {})
@@ -115,4 +119,18 @@ def parse_gladia_transcript(gladia_response):
             "text": text
         })
         
-    return full_text, speakers_list
+    # Extract Summary
+    summarization = result.get("summarization", {})
+    summary_results = summarization.get("results", [])
+    summary_text = "No summary could be generated."
+    if summary_results:
+        # If bullet points, it might be a single string with bullets, or a list. Gladia usually returns a string.
+        summary_text = summary_results
+        if isinstance(summary_results, list):
+            summary_text = summary_results[0] if summary_results else ""
+            
+    # Sometimes it's directly in summarization.get("summary") in older versions, but v2 uses results.
+    # We will just dump whatever Gladia gave into summary_text.
+    summary_str = str(summary_text)
+        
+    return full_text, speakers_list, summary_str

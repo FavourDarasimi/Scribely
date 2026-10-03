@@ -31,7 +31,7 @@ def transcribe_meeting(meeting_id):
         raw_response = poll_gladia_result(job_id)
         
         # Parse results
-        full_text, speakers = parse_gladia_transcript(raw_response)
+        full_text, speakers, summary_str = parse_gladia_transcript(raw_response)
         
         # Save Transcript
         Transcript.objects.create(
@@ -41,7 +41,13 @@ def transcribe_meeting(meeting_id):
             speakers=speakers
         )
         
-        # TODO: Implement LLM summary generation and create Summary object here
+        # Save Summary
+        from .models import Summary
+        Summary.objects.create(
+            meeting=meeting,
+            summary_text=summary_str,
+            action_items=[]
+        )
         
         # Update meeting status
         meeting.status = 'completed'
